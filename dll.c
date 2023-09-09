@@ -12,16 +12,21 @@ void traverse(nod *);
 void insertHead(nod** , int);
 void insertTail(nod** , int);
 void insertAtPosition(nod** , int , int);
+void deleteHead(nod **);
+void deleteTail(nod **);
+void deleteAtPosition(nod **,int);
 int main(){
 	nod *head = NULL ;
 	create(&head , 5);
 	insertHead(&head,0);
 	insertTail(&head,6);
 	insertAtPosition(&head,7,8);
+	deleteHead(&head);
+	deleteTail(&head);
+	deleteAtPosition(&head , 2);
 	traverse(head);
 	return 0;
 }
-
 void create(nod **head, int n){
 	if((*head) != NULL){
 		printf("LIST CREATED\n");
@@ -108,7 +113,6 @@ void insertAtPosition(nod **head , int item , int pos){
 		return;
 
 	}
-
 	int count = 0 , cur;
 	nod *temp = (*head);
 	while(temp!=NULL){
@@ -116,12 +120,10 @@ void insertAtPosition(nod **head , int item , int pos){
 		temp = temp->next;
 
 	}
-
 	if(pos>count+1 || pos<=0){
 		printf("INVALID POSITION\n");
 		return;
 	}
-	
 	temp = (*head);
 	cur = 1;
 	while(cur < pos-1 && temp!=NULL){
@@ -131,7 +133,6 @@ void insertAtPosition(nod **head , int item , int pos){
 	}
 	nod *newnode = (nod*)malloc(sizeof(nod));
 	newnode->data = item;
-
 	if(pos == 1)
 	{
 
@@ -148,9 +149,63 @@ void insertAtPosition(nod **head , int item , int pos){
 			newnode->next->prev = newnode;
 		newnode->prev = temp;
 		temp->next = newnode;
-
 	}
+	return;
+}
+void deleteHead(nod **head){
+	if((*head) == NULL){
+		printf("EMPTY LIST\n");
+		return;
+	}
+	nod *temp = (*head);
+	*head = (*head)->next;
+	(*head)->prev = NULL;
+	temp->next = NULL ;
+	free(temp);
+	return; 
+}
+void deleteTail(nod **head){
+	if(*head == NULL){
+		printf("EMPTY LIST\n");
+		return;
+	}
+	nod *temp = (*head);
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->prev->next = NULL ; 
+	temp->prev = NULL;
+	free(temp);
 
 	return;
+}
+void deleteAtPosition(nod **head , int pos){
+	if(*head == NULL){
+		printf("EMPTY LIST\n");
+		return ;
+	}
+	int count = 1;
+	nod *temp = (*head);
+	while(temp != NULL && count!=pos){
+		count++;
+		temp = temp->next;
+	} 
+	
+	if(pos<1 || pos>count || temp == NULL){
+		printf("INVALID POSITION \n");
+		return;
+	}
+	if(pos==1){
+		(*head) = (*head)->next;
+		(*head)->prev = NULL;
+		free(temp);
+		return;
+	}
+	temp->prev->next = temp->next;
+	if(temp->next!=NULL)
+		temp->next->prev = temp->prev;
+	temp->next = temp->prev = NULL;
+	free(temp);
+	return ;
 }
 
