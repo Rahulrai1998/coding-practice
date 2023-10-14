@@ -13,6 +13,8 @@ void preorder(nod*);
 void postorder(nod*);
 
 int isBST(nod*);
+nod* search_recursive(nod*,int);
+nod* search_iterative(nod*,int);
 
 int main(){
 	
@@ -36,7 +38,7 @@ int main(){
 	//postorder(p);
 
 
-	printf("%d\n",isBST(p));
+	printf("%d\n",search_recursive(p,1)->data);
 
 	return 0;
 }
@@ -84,4 +86,19 @@ int isBST(nod *root){
 	else return 1;
 }
 	
+nod *search_recursive(nod *root,int key){
+	if(root==NULL) return NULL;
+	if(key == root->data) return root;
+	else if(key < root->data) return search_recursive(root->left,key);
+	else return search_recursive(root->right,key);
+}
+
+nod *search_iterative(nod *root , int key){
+	while(root!=NULL){
+		if(root->data == key) return root;
+		else if(root->data < key) root = root->left;
+		else root= root->right;
+	}
+	return NULL;
+}
 	
