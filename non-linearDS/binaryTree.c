@@ -17,6 +17,9 @@ nod* search_recursive(nod*,int);
 nod* search_iterative(nod*,int);
 
 void insert(nod*,int);
+nod *inorderPred(nod*);
+nod *delete(nod*,int);
+
 
 int main(){
 	
@@ -42,6 +45,7 @@ int main(){
 
 	//printf("%d\n",search_recursive(p,1)->data);
 	insert(p,16);
+	delete(p,3);
 	inorder(p);
 	return 0;
 }
@@ -118,5 +122,33 @@ void insert(nod *root , int key){
 	if(pre->data < key) pre->right = newnode;
 	else pre->left = newnode;
 	return;
+}
+
+nod *inorderPred(nod *root){
+	root = root->left;
+	while(root->right!=NULL){
+		root = root->right;
+	}
+	return root;
+}
+nod *delete(nod *root , int key){
+	nod *iPre;
+	if(root==NULL) return NULL;
+	if(root->left == NULL && root->right) {
+		free(root);
+		return NULL;
+	}
+	if(key < root->data){
+		root->left = delete(root->left , key);
+
+	}else if(key> root->data){
+		root->right = delete(root->right,key);
+	}
+	else{
+		iPre = inorderPred(root);
+		root->data = iPre->data;
+		root->left = delete(root->left , iPre->data);
+	}
+	return root;
 }
 	
