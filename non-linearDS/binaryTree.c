@@ -16,6 +16,8 @@ int isBST(nod*);
 nod* search_recursive(nod*,int);
 nod* search_iterative(nod*,int);
 
+void insert(nod*,int);
+
 int main(){
 	
 	nod *p = createNode(5);
@@ -38,8 +40,9 @@ int main(){
 	//postorder(p);
 
 
-	printf("%d\n",search_recursive(p,1)->data);
-
+	//printf("%d\n",search_recursive(p,1)->data);
+	insert(p,16);
+	inorder(p);
 	return 0;
 }
 nod *createNode(int data){
@@ -100,5 +103,20 @@ nod *search_iterative(nod *root , int key){
 		else root= root->right;
 	}
 	return NULL;
+}
+
+void insert(nod *root , int key){
+	nod *pre , *newnode ; 
+	while(root!=NULL){
+		pre = root;
+		if(root->data == key) return;
+		else if(key < root->data) root = root->left;
+		else root = root->right;
+	}
+	newnode = createNode(16);
+	
+	if(pre->data < key) pre->right = newnode;
+	else pre->left = newnode;
+	return;
 }
 	
